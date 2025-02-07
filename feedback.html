@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form with Star Rating</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- Chart.js -->
+    <style>
+        /* General form styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/static/images/ap.png') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0 5px;
+        }
+
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Rating stars */
+        .stars {
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+
+        .star.active {
+            color: gold;
+        }
+
+        /* Charts Container */
+        .chart-container {
+            width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Feedback Form -->
+    <div class="feedback-container">
+        <h2>Feedback Form</h2>
+        <form id="feedback-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="5" placeholder="Enter your feedback here..." required></textarea>
+
+            <label>Rate Us:</label>
+            <div class="stars">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" name="rating" id="rating" required>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+        <div id="thank-you-message"></div>
+    </div>
+
+    <!-- Feedback Chart -->
+    <div class="chart-container">
+        <h2>Feedback Analysis</h2>
+        <canvas id="feedbackChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll(".star");
+            const ratingInput = document.getElementById("rating");
+            const feedbackForm = document.getElementById("feedback-form");
+            const thankYouMessage = document.getElementById("thank-you-message");
+            let feedbackChartInstance = null; // Store chart instance
+    
+            // Star rating selection
+            stars.forEach((star, index) => {
+                star.addEventListener("click", function () {
+                    ratingInput.value = index + 1;
+                    stars.forEach(s => s.classList.remove("active"));
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].classList.add("active");
+                    }
+                });
+            });
+    
+            // Handle form submission
+            feedbackForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                if (!ratingInput.value) {
+                    alert("Please select a rating.");
+                    return;
+                }
+    
+                // Submit feedback to server
+                fetch('/submit-feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(new FormData(feedbackForm))
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error("Error:", data.error);
+                        alert("Error: " + data.error);
+                    } else {
+                        thankYouMessage.textContent = `Thank you, ${data.name}! You rated us ${data.rating} stars.`;
+                        feedbackForm.reset();
+                        stars.forEach(s => s.classList.remove("active"));
+                        loadChartData(); // Refresh chart after new feedback
+                    }
+                })
+                .catch(error => {
+                    console.error("Error submitting feedback:", error);
+                    alert("Failed to submit feedback. Please try again later.");
+                });
+            });
+    
+            // Fetch and display feedback statistics
+            function loadChartData() {
+                fetch('/feedback-data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch feedback data");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const labels = Object.keys(data);
+                    const values = Object.values(data);
+                    const ctx = document.getElementById('feedbackChart').getContext('2d');
+    
+                    // Destroy existing chart before creating a new one
+                    if (feedbackChartInstance) {
+                        feedbackChartInstance.destroy();
+                    }
+    
+                    feedbackChartInstance = new Chart(ctx, {
+                        type: 'pie',  // Change to 'bar' for bar graph
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Feedback Ratings',
+                                data: values,
+                                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#8E44AD']
+                            }]
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading chart data:", error);
+                    alert("Error loading feedback statistics.");
+                });
+            }
+    
+            loadChartData(); // Load chart on page load
+        });
+    </script>
+    
+
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="register.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('static/images/ap.png'); /* Use your own image path */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form h2 {
+            color: white;
+            margin-bottom: 15px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(10px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            color: white;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            padding: 8px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            animation: inputAnimation 0.5s ease-out;
+        }
+
+        @keyframes inputAnimation {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            width: 100%;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: fadeIn 1s ease-out;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #6A0DAD;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            animation: buttonAnimation 0.5s ease-out;
+        }
+
+        @keyframes buttonAnimation {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        button:hover {
+            background-color: #5c0e9b;
+        }
+
+        p {
+            color: white;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #6A0DAD;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .spinner {
+            display: none;
+            margin: 10px auto;
+            width: 25px;
+            height: 25px;
+            border: 3px solid #fff;
+            border-top: 3px solid #6A0DAD;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Popup message styling */
+        #success-popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            animation: popupFadeIn 1s ease-out;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="registerForm" action="/register" method="post" onsubmit="return validatePasswords()">
+            <h2>Register</h2>
+
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select your gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="password">Password</label>
+            <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
+            </div>
+
+            <label for="confirm_password">Confirm Password</label>
+            <div class="password-container">
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('confirm_password')">👁️</span>
+            </div>
+
+            <p id="error-message">Passwords do not match!</p>
+
+            <button type="submit">Sign Up</button>
+            <div class="spinner" id="loadingSpinner"></div>
+
+            <p>Already have an account? <a href="/login">Login</a></p>
+        </form>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="success-popup">Registration Successful!</div>
+
+    <script>
+        function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const type = input.getAttribute("type") === "password" ? "text" : "password";
+    input.setAttribute("type", type);
+}
+
+function validatePasswords() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirm_password").value;
+    var errorMessage = document.getElementById("error-message");
+    var successPopup = document.getElementById("success-popup");
+    var spinner = document.getElementById("loadingSpinner");
+
+    // Initially hide success message and spinner
+    successPopup.style.display = "none";
+    spinner.style.display = "none";
+    errorMessage.style.display = "none"; // Ensure error is hidden initially
+
+    // Check if both fields have input before validating
+    if (password === "" || confirmPassword === "") {
+        return false; // Do nothing if fields are empty
+    }
+
+    if (password !== confirmPassword) {
+        errorMessage.style.display = "block";  // Show error message
+        successPopup.style.display = "none";   // Hide success message
+        return false; // Prevent form submission
+    } else {
+        errorMessage.style.display = "none";  // Hide error message
+        successPopup.style.display = "block";  // Show success message
+
+        // Simulate a process and show the spinner after success message
+        setTimeout(function() {
+            spinner.style.display = "block"; // Show the spinner
+        }, 500);
+
+        // Hide success popup after 5 seconds
+        setTimeout(function() {
+            successPopup.style.display = "none";
+            spinner.style.display = "none";
+        }, 5000);
+
+        return true; // Allow form submission if passwords match
+    }
+}
+
+// Attach event listeners to input fields to validate on user input
+window.onload = function() {
+    document.getElementById("password").addEventListener("input", validatePasswords);
+    document.getElementById("confirm_password").addEventListener("input", validatePasswords);
+};
+
+    </script>
+</body>
+</html>

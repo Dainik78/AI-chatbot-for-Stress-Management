@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Bot</title>
+    
+    <style>
+        #thinking-animation {
+    position: absolute;
+    bottom: 15px;
+    left: 10px;
+        }
+
+
+        /* Additional styles for chatbox */
+        .chatbox {
+            max-width: 700px; /* Increased width */
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .chat-messages {
+            height: 400px; /* Increased height */
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+        }
+
+        .bot-message {
+            color: blue;
+        }
+
+        .user-message {
+            color: green;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 12px;
+            color: gray;
+        }
+
+        aside {
+            background-color: #f4f4f4;
+            padding: 15px;
+            flex: 1;
+        }
+
+        /* Button styles for sidebar */
+        .section-button {
+            display: block;
+            text-align: center;
+            margin: 15px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%; /* Full width inside parent container */
+            max-width: 500px; /* Max width */
+            transition: background-color 0.3s ease; /* Smooth animation */
+        }
+
+        .section-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Header navigation styles */
+        header nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #00ADB5; /* Header background */
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+        }
+
+        header nav ul li a {
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            padding: 10px;
+            transition: color 0.3s ease, transform 0.3s ease; /* Adding hover animation */
+        }
+
+        header nav ul li a:hover {
+            color: #ffcc00;
+            transform: scale(1.1); /* Grow effect */
+        }
+
+        /* Media query for responsive design */
+        @media (max-width: 768px) {
+            .chatbox {
+                max-width: 100%; /* Full width for smaller screens */
+            }
+        }
+
+        /* Thinking Animation */
+#thinking-animation {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 15px;
+    left: 10px;
+}
+
+@media (max-width: 768px) {
+    .chatbox {
+        max-width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/community">Community</a></li>
+                    <li><a href="/feedback">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <aside>
+            <!-- Corrected paths -->
+            <button class="section-button" onclick="location.href='/motivation'">Motivational Videos</button>
+
+            <button class="section-button" onclick="location.href='/psychiatrist'">Psychiatrist Number</button>
+            <button class="section-button" onclick="location.href='/yournotalone'">You Are Not Alone</button>
+        </aside>
+
+        <main>
+            <div class="chatbox">
+                <h2>AI Chat Bot</h2>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will appear here -->
+                </div>
+                <form id="chat-form" class="chat-form">
+                    <input type="text" placeholder="Enter your message" class="message" id="message-box" required>
+                    <button id="send-button" type="submit">Send</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageBox = document.getElementById('message-box');
+        const chatMessages = document.getElementById('chat-messages');
+
+        // Handle form submission
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const userMessage = messageBox.value;
+            if (userMessage.trim() === '') return;
+
+            // Add user's message to the chat with timestamp
+            appendMessage(userMessage, 'user-message', getCurrentTime());
+
+            // Send the message to the server
+            fetch('http://localhost:5000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessage = data.response;
+                // Add bot's message to the chat with timestamp
+                appendMessage(botMessage, 'bot-message', getCurrentTime());
+            })
+            .catch(error => console.error('Error:', error));
+
+            // Clear the input field
+            messageBox.value = '';
+        });
+
+        // Function to append a message to the chat with timestamp
+        function appendMessage(message, className, timestamp) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', className);
+            
+            const timestampElement = document.createElement('span');
+            timestampElement.classList.add('timestamp');
+            timestampElement.textContent = timestamp;
+            
+            messageElement.textContent = message;
+            messageElement.appendChild(timestampElement);
+            
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+        }
+
+        // Function to get the current time in HH:MM format
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return `${hours}:${minutes}`;
+        }
+
+        // const chatForm = document.getElementById('chat-form');
+        // const messageBox = document.getElementById('message-box');
+        // const chatMessages = document.getElementById('chat-messages');
+
+        function showBotThinking() {
+    // Check if the thinking animation already exists
+    if (document.getElementById('thinking-animation')) return;
+
+    const thinkingElement = document.createElement('div');
+    thinkingElement.id = 'thinking-animation';
+    thinkingElement.classList.add('chat-message', 'bot-message');
+
+    // Using a video for the thinking animation
+    thinkingElement.innerHTML = `
+        <video autoplay loop muted style="
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            left: 10px;
+            bottom: 15px;
+        ">
+            <source src="static/images/thinking.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    `;
+
+    chatMessages.appendChild(thinkingElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to bottom
+}
+
+// Function to remove typing indicator
+function removeBotThinking() {
+    const thinkingElement = document.getElementById('thinking-animation');
+    if (thinkingElement) {
+        thinkingElement.remove();
+    }
+}
+
+// Handle form submission
+chatForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const userMessage = messageBox.value;
+    if (userMessage.trim() === '') return;
+
+    // Add user's message to the chat with timestamp
+    appendMessage(userMessage, 'user-message', getCurrentTime());
+
+    // Show bot thinking animation at the leftmost corner
+    showBotThinking();
+
+    // Simulate delay before response (2 seconds)
+    setTimeout(() => {
+        // Send the message to the server
+        fetch('http://localhost:5000/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: userMessage })
+        })
+        .then(response => response.json())
+        .then(data => {
+            removeBotThinking(); // Remove animation
+            const botMessage = data.response;
+            // Add bot's message to the chat with timestamp
+            appendMessage(botMessage, 'bot-message', getCurrentTime());
+        })
+        .catch(error => {
+            removeBotThinking();
+            console.error('Error:', error);
+            appendMessage("Sorry, I am having trouble responding right now.", 'bot-message', getCurrentTime());
+        });
+
+    }, 2000); // 2 seconds delay
+
+    // Clear the input field
+    messageBox.value = '';
+});
+
+// Function to append a message to the chat with timestamp
+function appendMessage(message, className, timestamp) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message', className);
+    
+    const timestampElement = document.createElement('span');
+    timestampElement.classList.add('timestamp');
+    timestampElement.textContent = timestamp;
+    
+    messageElement.textContent = message;
+    messageElement.appendChild(timestampElement);
+    
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+}
+
+// Function to get the current time in HH:MM format
+function getCurrentTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutes}`;
+}
+
+        
+    </script>
+</body>
+</html>

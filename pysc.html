@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Psychiatrist Near You</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f7f7f7;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .loading {
+            display: none;
+            font-size: 14px;
+            color: #888;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        td {
+            color: #555;
+        }
+
+        .no-psychiatrist {
+            margin-top: 20px;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find a Psychiatrist Near You</h1>
+        <button id="find-location">Find My Location</button>
+
+        <p id="location-status"></p>
+        <div class="loading">
+            <div class="spinner"></div>
+            Fetching psychiatrist data...
+        </div>
+
+        <table id="psychiatrist-info">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Clinic Location</th>
+                    <th>Experience (Years)</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" style="text-align:center;">Not Available</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="no-psychiatrist" id="no-psychiatrist">
+            <p>Sorry, no psychiatrists found in your area.</p>
+        </div>
+    </div>
+
+    <script>
+         const psychiatristsData = [
+            { name: 'Dr. Aditi Sharma', phone: '1234567890', clinic_location: 'Virar', years_of_experience: 5, price: '1000' },
+            { name: 'Dr. Rohan Desai', phone: '2345678901', clinic_location: 'Vasai', years_of_experience: 7, price: '1200' },
+            { name: 'Dr. Sneha Patil', phone: '3456789012', clinic_location: 'Bhayandar', years_of_experience: 3, price: '800' },
+            { name: 'Dr. Vikram Rao', phone: '4567890123', clinic_location: 'Borivali', years_of_experience: 10, price: '1500' },
+            { name: 'Dr. Priya Kulkarni', phone: '5678901234', clinic_location: 'Kandivali', years_of_experience: 6, price: '1100' },
+            { name: 'Dr. Rohit Deshmukh', phone: '9665462348', clinic_location: 'Malad', years_of_experience: 2, price: '800' },
+            { name: 'Dr. Prabhojit mohanty', phone: '7008266758', clinic_location: 'Malad', years_of_experience: 3, price: '450' },
+            { name: 'Dr. Shefali Shah', phone: '7210000720', clinic_location: 'Malad', years_of_experience: 4, price: '550' },
+            { name: 'Dr. Ravi Mehta', phone: '7890123456', clinic_location: 'Andheri', years_of_experience: 4, price: '900' },
+            { name: 'Dr. Kavita Joshi', phone: '8901234567', clinic_location: 'Virar', years_of_experience: 9, price: '1400' },
+            { name: 'Dr. Anil Bhat', phone: '9012345678', clinic_location: 'Vasai', years_of_experience: 5, price: '1000' },
+            { name: 'Dr. Seema Khatri', phone: '1234567800', clinic_location: 'Bhayandar', years_of_experience: 2, price: '700' },
+            { name: 'Dr. Sanjay Gupta', phone: '2345678902', clinic_location: 'Borivali', years_of_experience: 12, price: '1600' },
+            { name: 'Dr. Meena Rao', phone: '3456789013', clinic_location: 'Kandivali', years_of_experience: 3, price: '850' },
+            { name: 'Dr. Ashish Sinha', phone: '4567890124', clinic_location: 'Malad', years_of_experience: 11, price: '1400' },
+            { name: 'Dr. Tanvi Verma', phone: '5678901235', clinic_location: 'Andheri', years_of_experience: 6, price: '1500' },
+            { name: 'Dr. Amit Shah', phone: '6789012346', clinic_location: 'Virar', years_of_experience: 4, price: '900' },
+            { name: 'Dr. Nidhi Verma', phone: '7890123457', clinic_location: 'Vasai', years_of_experience: 7, price: '1200' },
+            { name: 'Dr. Rahul Sharma', phone: '8901234568', clinic_location: 'Bhayandar', years_of_experience: 1, price: '600' },
+            { name: 'Dr. Sheetal Patil', phone: '9012345679', clinic_location: 'Borivali', years_of_experience: 8, price: '300' },
+            { name: 'Dr. Neeraj Iyer', phone: '1234567891', clinic_location: 'Kandivali', years_of_experience: 9, price: '1400' },
+            { name: 'Dr. Charu Joshi', phone: '2345678903', clinic_location: 'Malad', years_of_experience: 10, price: '1500' },
+            { name: 'Dr. Kiran Bhat', phone: '3456789014', clinic_location: 'Andheri', years_of_experience: 6, price: '1000' },
+        ]
+
+        document.getElementById('find-location').addEventListener('click', function() {
+            const locationStatus = document.getElementById('location-status');
+            const loading = document.querySelector('.loading');
+            const noPsychiatrist = document.getElementById('no-psychiatrist');
+
+            locationStatus.textContent = '';
+            loading.style.display = 'inline';
+            noPsychiatrist.style.display = 'none';
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                locationStatus.textContent = 'Geolocation is not supported by this browser.';
+                loading.style.display = 'none';
+            }
+
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                let foundLocation = '';
+                const locationMap = {
+                    'Virar': { lat: 19.3065, long: 72.8353 },
+                    'Malad': { lat: 19.1755, long: 72.8405 },
+                    'Vasai': { lat: 19.4069, long: 72.8383 },
+                    'Bhayandar': { lat: 19.2972, long: 72.8327 },
+                    'Borivali': { lat: 19.2043, long: 72.8351 },
+                    'Kandivali': { lat: 19.2133, long: 72.8300 },
+                    'Andheri': { lat: 19.1206, long: 72.8313 }
+                };
+
+                for (const [location, coords] of Object.entries(locationMap)) {
+                    if (Math.abs(latitude - coords.lat) < 0.1 && Math.abs(longitude - coords.long) < 0.1) {
+                        foundLocation = location;
+                        break;
+                    }
+                }
+
+                loading.style.display = 'none';
+                if (foundLocation) {
+                    locationStatus.textContent = `Your location: ${foundLocation}`;
+                    displayPsychiatrists(foundLocation);
+                } else {
+                    locationStatus.textContent = 'Location not recognized.';
+                }
+            }
+
+            function error() {
+                loading.style.display = 'none';
+                locationStatus.textContent = 'Unable to retrieve your location. Please try again.';
+            }
+        });
+
+        function displayPsychiatrists(location) {
+            const filteredPsychiatrists = psychiatristsData.filter(p => p.clinic_location === location);
+            const tableBody = document.querySelector('#psychiatrist-info tbody');
+
+            tableBody.innerHTML = ''; 
+
+            if (filteredPsychiatrists.length > 0) {
+                filteredPsychiatrists.forEach(psychiatrist => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${psychiatrist.name}</td>
+                            <td>${psychiatrist.phone}</td>
+                            <td>${psychiatrist.clinic_location}</td>
+                            <td>${psychiatrist.years_of_experience}</td>
+                            <td>${psychiatrist.price}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No psychiatrists available in this location.</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>

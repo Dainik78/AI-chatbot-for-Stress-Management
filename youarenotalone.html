@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Management Help</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('static/images/help.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px);
+            -webkit-filter: blur(0px);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            margin: 0px;
+            border-radius: 10px;
+        }
+
+        header {
+            background-color: #4caf50;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            font-size: 2em;
+            border-radius: 8px 8px 0 0;
+        }
+
+        section {
+            padding: 50px;
+        }
+
+        #helpline-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        #helpline-section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        #helpline-numbers {
+            font-size: 1.5em;
+            color: #333;
+            animation: fadeIn 5s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #helpline-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #helpline-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <header>
+            Stress Management & Support
+        </header>
+
+        <section>
+            <p>
+                Managing stress is crucial for maintaining both mental and physical well-being.
+                Here, we provide resources and helplines that you can contact for assistance in times of crisis.
+            </p>
+        </section>
+
+        <section id="helpline-section">
+            <h2>Available Helplines</h2>
+            <div id="helpline-numbers"></div>
+            <button id="helpline-button" onclick="displayNextNumber()">Get Another Number</button>
+        </section>
+    </div>
+
+    <script>
+        // Array of free helpline numbers
+        const helplineNumbers = [
+            'Suicide Helpline: 1800-273-8255',
+            'Stress Support: 1800-123-4567',
+            'Mental Health Help: 1800-987-6543',
+            'Crisis Support: 1800-456-7890'
+        ];
+
+        // Track current helpline index
+        let currentIndex = 0;
+
+        // Function to display the next helpline number
+        function displayNextNumber() {
+            const helplineDiv = document.getElementById('helpline-numbers');
+            currentIndex = (currentIndex + 1) % helplineNumbers.length;
+            helplineDiv.innerHTML = helplineNumbers[currentIndex];
+        }
+
+        // Display the first helpline number on page load
+        window.onload = displayNextNumber;
+    </script>
+
+</body>
+</html>

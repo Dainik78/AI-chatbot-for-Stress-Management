@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainy Mood</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            color: white;
+            text-align: center;
+        }
+
+        /* Background overlay */
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.5);
+            z-index: -1;
+            transition: background-image 1s ease-in-out;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #playButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        #playButton:active {
+            transform: scale(0.9);
+        }
+
+        #playButton img {
+            width: 50%;
+            height: 50%;
+            transition: transform 0.3s;
+        }
+
+        #playButton:active img {
+            transform: scale(1.2);
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        #feelBetterButton {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        #feelBetterButton:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+
+    <div class="container">
+        <button id="playButton">
+            <img id="playPauseIcon" src="static/images/play.jpg" alt="Play">
+        </button>
+        <h2>It's Raining</h2>
+        <a id="feelBetterButton" href="register">Make Me Feel Better</a>
+    </div>
+
+    <script>
+        const playButton = document.getElementById('playButton');
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        const background = document.getElementById('background');
+
+        const audio = new Audio('static/images/rain.mp3');
+        audio.loop = true;
+
+        const backgrounds = ['static/images/rain1.webp',
+  'static/images/rain2.jpg',
+  'static/images/rain3.jpg',
+  'static/images/rain4.jpeg']; // Add paths to your background images
+        let currentBackground = 0;
+
+        // Change background every 10 seconds
+        setInterval(() => {
+            currentBackground = (currentBackground + 1) % backgrounds.length;
+            background.style.backgroundImage = `url('${backgrounds[currentBackground]}')`;
+        }, 5000);
+
+        // Play/Pause functionality
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseIcon.src = 'static/images/pauseOG.jpg'; // Switch to pause icon
+            } else {
+                audio.pause();
+                playPauseIcon.src = 'static/images/play.jpg'; // Switch to play icon
+            }
+        });
+
+        // Initialize background
+        background.style.backgroundImage = `url('${backgrounds[currentBackground]}')`;
+    </script>
+</body>
+</html>

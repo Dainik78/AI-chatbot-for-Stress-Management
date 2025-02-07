@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivational Videos</title>
+    <link rel="stylesheet" href="motivaton.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Back Button - fixed in top left */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #4CAF50;
+            padding: 10px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        .back-button img {
+            display: block;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Filter Dropdown - fixed in top right */
+        #filter-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #filter {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+
+        #filter:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Video Container */
+        .video-container {
+            padding: 100px 20px 20px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00796b;
+        }
+
+        /* Video List */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Video Item */
+        .video-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #00bfa5;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        /* Hover Effect Reduced */
+        .video-item:hover {
+            transform: scale(1.02);
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-item img {
+            width: 200px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+
+        .video-description h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #00796b;
+        }
+
+        .video-description p {
+            margin-top: 8px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* When video item is clicked */
+        .video-item:active {
+            transform: scale(0.98);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button (Fixed Position) -->
+    <a href="/home" class="back-button">
+        <img src="static/images/Back Button.png" alt="Back">
+    </a>
+
+    <!-- Filter Dropdown (Fixed Position) -->
+    <div id="filter-container">
+        <label for="filter">Filter Videos:</label>
+        <select id="filter" onchange="filterVideos()">
+            <option value="all">All</option>
+            <option value="student">Student</option>
+            <option value="lovelife">Love Life</option>
+            <option value="society">Society Pressure</option>
+            <option value="job">Job</option>
+            <option value="lonely">Lonely</option>
+        </select>
+    </div>
+
+    <!-- Video Items -->
+    <div class="video-container">
+        <h1>Motivational Videos</h1>
+        <div class="video-list">
+            <!-- Existing Videos -->
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=daz_qnGdC6o" target="_blank">
+                    <img src="static/images/m5.png" alt="Video Thumbnail 1">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=daz_qnGdC6o" target="_blank">
+                        <h3>Ready to Achieve Your Goal</h3>
+                        <p>Padhne ka Man nahi karta?😭| Best Motivational video for students 🔥</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lovelife">
+                <a href="https://www.youtube.com/watch?v=xyz2" target="_blank">
+                    <img src="static/images/m2.png" alt="Video Thumbnail 2">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=xyz2" target="_blank">
+                        <h3>Motivational Video 2</h3>
+                        <p>Find love and happiness with these motivational tips.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item society">
+                <a href="https://www.youtube.com/watch?v=xyz3" target="_blank">
+                    <img src="static/images/m3.png" alt="Video Thumbnail 3">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=xyz3" target="_blank">
+                        <h3>Motivational Video 3</h3>
+                        <p>Learn how to overcome societal pressure and stay true to yourself.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item job">
+                <a href="https://www.youtube.com/watch?v=xyz4" target="_blank">
+                    <img src="static/images/m4.png" alt="Video Thumbnail 4">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=xyz4" target="_blank">
+                        <h3>Motivational Video 4</h3>
+                        <p>Achieve your career goals with these job success tips.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lonely">
+                <a href="https://www.youtube.com/watch?v=xyz5" target="_blank">
+                    <img src="static/images/m5.png" alt="Video Thumbnail 5">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=xyz5" target="_blank">
+                        <h3>Motivational Video 5</h3>
+                        <p>Combat loneliness with motivational advice on building relationships.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Adding more videos -->
+            <!-- Student Videos -->
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=lBOItUxOpBU" target="_blank">
+                    <img src="static/images/m6.png" alt="Video Thumbnail 6">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=lBOItUxOpBU" target="_blank">
+                        <h3>"सत्य</h3>
+                        <p> A Motivational Video (Not For Everyone) | Shobhit Nirwan</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=utsHj7cVp_0" target="_blank">
+                    <img src="static/images/m7.png" alt="Video Thumbnail 7">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=utsHj7cVp_0" target="_blank">
+                        <h3>VIRAAT MOTIVATION 🔥</h3>
+                        <p>Watch This if You're Feeling Low !! | Success stories from top achievers in academia.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Love Life Videos -->
+            <div class="video-item lovelife">
+                <a href="https://www.yout-ube.com/watch?v=qKf7nWyp6jU" target="_blank">
+                    <img src="static/images/m8.png" alt="Video Thumbnail 8">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=qKf7nWyp6jU" target="_blank">
+                        <h3>How To Handle A Breakup? Gaur Gopal Das</h3>
+                        <p>Motivate yourself to grow in love and life together.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lovelife">
+                <a href="https://www.yout-ube.com/watch?v=dXL3xF-NDaQ" target="_blank">
+                    <img src="static/images/m9.png" alt="Video Thumbnail 9">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=dXL3xF-NDaQ" target="_blank">
+                        <h3>How to get rid of Emotional Pain? By Sandeep Maheshwari</h3>
+                        <p>Building strong relationships and emotional intelligence.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Society Pressure Videos -->
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=WOaGTKD1Ruw" target="_blank">
+                    <img src="static/images/m10.png" alt="Video Thumbnail 10">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=WOaGTKD1Ruw" target="_blank">
+                        <h3>Are you in PARENTS PRESSURE ? 😞</h3>
+                        <p>How to resist societal pressure and forge your own path.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=xSs5Syrfq3g" target="_blank">
+                    <img src="static/images/m11.png" alt="Video Thumbnail 11">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=xSs5Syrfq3g" target="_blank">
+                        <h3>Pressure - Motivational Video</h3>
+                        <p>Finding your identity amidst societal expectations.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Job Videos -->
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=vuj2ZaV6Vnw" target="_blank">
+                    <img src="static/images/m12.png" alt="Video Thumbnail 12">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=vuj2ZaV6Vnw" target="_blank">
+                        <h3>get to work - motivational speech compilation</h3>
+                        <p>Tips for acing job interviews and impressing employers.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=wnHW6o8WMas" target="_blank">
+                    <img src="static/images/m13.png" alt="Video Thumbnail 13">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=wnHW6o8WMas" target="_blank">
+                        <h3>NO EXCUSES - Best Motivational Video</h3>
+                        <p>Strategies for career advancement and growth.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Lonely Videos -->
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=yTGTOxC8eEc" target="_blank">
+                    <img src="static/images/m14.png" alt="Video Thumbnail 14">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=yTGTOxC8eEc" target="_blank">
+                        <h3>अकेले रहना सीखो - Learn To Be Alone </h3>
+                        <p>Finding joy and connection in solitude.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=4H0U1kOsLa4" target="_blank">
+                    <img src="static/images/m15.png" alt="Video Thumbnail 15">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=4H0U1kOsLa4" target="_blank">
+                        <h3>"I have No Friends" - Motivational speech by Tata Ratan </h3>
+                        <p>Overcoming loneliness: Building friendships and community.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Continuing with more videos -->
+            <!-- Student Videos -->
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=znfWWbM8sok" target="_blank">
+                    <img src="static/images/m16.png" alt="Video Thumbnail 16">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=znfWWbM8sok" target="_blank">
+                        <h3>Wasting your time ? Why !! | PhysicsWallah Motivation | IIT/NEET | Time management</h3>
+                        <p>Time management tips for busy students.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=b8n-wpvBjrw" target="_blank">
+                    <img src="static/images/m17.png" alt="Video Thumbnail 17">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=b8n-wpvBjrw" target="_blank">
+                        <h3>Stop Wasting your Time! | The Scientific Way | Dhruv Rathee</h3>
+                        <p>How to stay motivated throughout the semester.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Love Life Videos -->
+            <div class="video-item lovelife">
+                <a href="https://www.yout-ube.com/watch?v=UfkKZqG-WTs" target="_blank">
+                    <img src="static/images/m18.png" alt="Video Thumbnail 18">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=UfkKZqG-WTs" target="_blank">
+                        <h3>How to Practice Self Love | Jaya Kishori | Motivational Video</h3>
+                        <p>Enhancing your love life through personal growth.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lovelife">
+                <a href="https://www.yout-ube.com/watch?v=8Vwcn4hMWvM" target="_blank">
+                    <img src="static/images/m19.png" alt="Video Thumbnail 19">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=8Vwcn4hMWvM" target="_blank">
+                        <h3>Learn To Love Yourself | Buddhism In English</h3>
+                        <p>The importance of self-love and self-care.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Society Pressure Videos -->
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=3gHAmM4DNb0" target="_blank">
+                    <img src="static/images/m20.png" alt="Video Thumbnail 20">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=3gHAmM4DNb0" target="_blank">
+                        <h3>How to Handle PRESSURE? Guidance by Avadh Ojha Sir</h3>
+                        <p>How to handle peer pressure effectively.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=CoQ_3m_i4cw" target="_blank">
+                    <img src="static/images/m21.png" alt="Video Thumbnail 21">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=CoQ_3m_i4cw" target="_blank">
+                        <h3>Before You Feel Pressure - WATCH THIS | by Jay Shetty</h3>
+                        <p>Understanding the effects of social media on self-esteem.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Job Videos -->
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=K8S8OvPhMDg" target="_blank">
+                    <img src="static/images/m22.png" alt="Video Thumbnail 22">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=K8S8OvPhMDg" target="_blank">
+                        <h3>WHEN THINGS GET HARD - Powerful Motivational Video</h3>
+                        <p>Finding your dream job: A motivational guide.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=rwSc--kjQrU" target="_blank">
+                    <img src="static/images/m23.png" alt="Video Thumbnail 23">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=rwSc--kjQrU" target="_blank">
+                        <h3>If Nothing Seems to be Going Your Way - WATCH THIS | Instant Motivation</h3>
+                        <p>Networking tips for career success.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Lonely Videos -->
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=NpbUKU7ETVo" target="_blank">
+                    <img src="static/images/m24.png" alt="Video Thumbnail 24">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=NpbUKU7ETVo" target="_blank">
+                        <h3>Power of Being Alone - MUST WATCH | by Him eesh Madaan</h3>
+                        <p>Dealing with loneliness: Finding joy in your own company.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=L-RFZHdZZ0k" target="_blank">
+                    <img src="static/images/m25.png" alt="Video Thumbnail 25">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=L-RFZHdZZ0k" target="_blank">
+                        <h3>How to Boost Your Brain & Transform Life using brain tricks - with Vikaas Naagru</h3>
+                        <p>Creating meaningful connections and friendships.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- More Videos -->
+            <!-- Student Videos -->
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=Bi-7pho5XB8" target="_blank">
+                    <img src="static/images/m26.png" alt="Video Thumbnail 26">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=Bi-7pho5XB8" target="_blank">
+                        <h3>UZAIR Best Animated Short Films 2021 - Motivational & Inspirational</h3>
+                        <p>Exam preparation strategies that work.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=1P3ZgLOy-w8" target="_blank">
+                    <img src="static/images/m27.png" alt="Video Thumbnail 27">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=1P3ZgLOy-w8" target="_blank">
+                        <h3>HOPE (2020)</h3>
+                        <p>How to maintain focus and discipline in studies.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Love Life Videos -->
+            <div class="video-item lovelife">
+                <a href="https://www.yout-ube.com/watch?v=_sSRbyLtN6Q" target="_blank">
+                    <img src="static/images/m28.png" alt="Video Thumbnail 28">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=_sSRbyLtN6Q" target="_blank">
+                        <h3>LOVE YOURSELF - Best Hopecore Motivational Speeches</h3>
+                        <p>Building a healthy relationship: Tips and tricks.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lovelife">
+                <a href="https://www.youtube.com/watch?v=9XXoSS8cMnw" target="_blank">
+                    <img src="static/images/m29.png" alt="Video Thumbnail 29">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=9XXoSS8cMnw" target="_blank">
+                        <h3>अपनी VALUE पहचानो | Life-Changing Motivational Video</h3>
+                        <p>Creating a loving environment in your relationship.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Society Pressure Videos -->
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=XIMK1Q1ISss" target="_blank">
+                    <img src="static/images/m30.png" alt="Video Thumbnail 30">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=XIMK1Q1ISss" target="_blank">
+                        <h3>Jeetu Bhaiya Decodes The Peer Pressure Theory 🔥</h3>
+                        <p>Standing strong against societal norms and pressures.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item society">
+                <a href="https://www.yout-ube.com/watch?v=pts_h1T0XOc" target="_blank">
+                    <img src="static/images/m31.png" alt="Video Thumbnail 31">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=pts_h1T0XOc" target="_blank">
+                        <h3>Earn In Lakhs Using These 5 Skills!</h3>
+                        <p>Finding your voice and speaking your truth.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Job Videos -->
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=DmTp7A-43as" target="_blank">
+                    <img src="static/images/m32.png" alt="Video Thumbnail 32">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=DmTp7A-43as" target="_blank">
+                        <h3>ये 15 Skills जीवन बदल देंगी! | Learn with Free Courses | Things School Won't Teach You!</h3>
+                        <p>How to develop skills for future job markets.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item job">
+                <a href="https://www.yout-ube.com/watch?v=3Z5s-9jmoWw" target="_blank">
+                    <img src="static/images/m33.png" alt="Video Thumbnail 33">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=3Z5s-9jmoWw" target="_blank">
+                        <h3>5 Highest Paying Skills + Courses of 2024</h3>
+                        <p>Career planning: Steps to achieve your goals.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Lonely Videos -->
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=I9hJ_Rux9y0" target="_blank">
+                    <img src="static/images/m34.png" alt="Video Thumbnail 34">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=I9hJ_Rux9y0" target="_blank">
+                        <h3>How To Make Friends</h3>
+                        <p>Embracing solitude for personal growth.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lonely">
+                <a href="https://www.yout-ube.com/watch?v=D8jMB2KpCN0" target="_blank">
+                    <img src="static/images/m35.png" alt="Video Thumbnail 35">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=D8jMB2KpCN0" target="_blank">
+                        <h3>How to Make Friends When You're Socially Awkward</h3>
+                        <p>Finding happiness in your own company.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Student Videos -->
+            <div class="video-item student">
+                <a href="https://www.yout-ube.com/watch?v=y55bIvC5mYI" target="_blank">
+                    <img src="static/images/m36.png" alt="Video Thumbnail 36">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.yout-ube.com/watch?v=y55bIvC5mYI" target="_blank">
+                        <h3>How I *Quickly* Removed Distractions and Started a New Life (you can too)</h3>
+                        <p>How to study effectively and efficiently.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item student">
+                <a href="https://www.youtube.com/watch?v=cNtDZzdFGfQ" target="_blank">
+                    <img src="static/images/m37.png" alt="Video Thumbnail 37">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=cNtDZzdFGfQ" target="_blank">
+                        <h3>A must watch video for AVERAGE STUDENT 😥 | PhysicsWallah Motivation | Alakh Pandey |</h3>
+                        <p>Techniques to improve concentration while studying.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Love Life Videos -->
+            <div class="video-item lovelife">
+                <a href="https://www.youtube.com/watch?v=QMnEP2DYfmI" target="_blank">
+                    <img src="static/images/m38.png" alt="Video Thumbnail 38">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=QMnEP2DYfmI" target="_blank">
+                        <h3>Ripple (Award Winning)- Kindness and good deeds will come back to you</h3>
+                        <p>Nurturing love through kindness and understanding.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-item lovelife">
+                <a href="https://www.youtube.com/watch?v=I3LcSMYPGsA" target="_blank">
+                    <img src="static/images/m39.png" alt="Video Thumbnail 39">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=I3LcSMYPGsA" target="_blank">
+                        <h3>7 SMART Tips for Effective COMMUNICATION | by Him eesh Madaan</h3>
+                        <p>Communicating effectively in relationships.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Society Pressure Videos -->
+            <div class="video-item society">
+                <a href="https://www.youtube.com/watch?v=QRbEdw32yOg" target="_blank">
+                    <img src="static/images/m40.png" alt="Video Thumbnail 40">
+                </a>
+                <div class="video-description">
+                    <a href="https://www.youtube.com/watch?v=QRbEdw32yOg" target="_blank">
+                        <h3>Motivational Video 40</h3>
+                        <p>Challenging the status quo: Be the change.</p>
+                    </a>
+                </div>
+            </div>
+
+            
+            
+        </div>
+    </section>
+    <script>
+        function filterVideos() {
+    const filterValue = document.getElementById('filter').value;
+    const videoItems = document.querySelectorAll('.video-item');
+
+    videoItems.forEach(item => {
+        // If "All" is selected, show all videos
+        if (filterValue === 'all') {
+            item.style.display = 'flex'; // Show the video item
+        } else {
+            // Check if the item has the selected class
+            if (item.classList.contains(filterValue)) {
+                item.style.display = 'flex'; // Show the video item
+            } else {
+                item.style.display = 'none'; // Hide the video item
+            }
+        }
+    });
+}
+
+    </script>
+</body>
+</html>

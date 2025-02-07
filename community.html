@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #4caf50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        #forum {
+            margin-top: 20px;
+        }
+
+        .post {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post-content {
+            flex-grow: 1;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Stress Management Community Forum</h1>
+        </header>
+        <main>
+            <section id="new-post">
+                <h2>Create a Post</h2>
+                <textarea id="post-content" placeholder="Share your thoughts..."></textarea>
+                <button onclick="addPost()">Post</button>
+            </section>
+            <section id="forum">
+                <h2>Discussion Forum</h2>
+                <div id="posts"></div>
+            </section>
+        </main>
+    </div>
+
+    <script> 
+        // Load posts from localStorage when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            displayPosts();
+        });
+
+        function addPost() {
+            const postContent = document.getElementById("post-content").value.trim();
+            if (postContent === "") {
+                alert("Post content cannot be empty!");
+                return;
+            }
+
+            // Get existing posts from localStorage or set empty array
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+            
+            // Add new post to array
+            posts.push(postContent);
+            
+            // Save updated posts back to localStorage
+            localStorage.setItem("posts", JSON.stringify(posts));
+
+            // Clear input field
+            document.getElementById("post-content").value = "";
+
+            // Update display
+            displayPosts();
+        }
+
+        function displayPosts() {
+            const postsContainer = document.getElementById("posts");
+            postsContainer.innerHTML = "";
+
+            // Retrieve posts from localStorage
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+            posts.forEach((post) => {
+                const postDiv = document.createElement("div");
+                postDiv.className = "post";
+                postDiv.innerHTML = `
+                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" class="profile-pic">
+                    <div class="post-content">
+                        <p class="username">Anonymous</p>
+                        <p>${post}</p>
+                    </div>
+                `;
+                postsContainer.appendChild(postDiv);
+            });
+        }
+    </script>
+</body>
+</html>
